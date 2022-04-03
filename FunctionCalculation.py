@@ -50,7 +50,7 @@ def main():
 
     # Determine the total cost. If 100 or less 0.87, if 250.01 to 100.01 0.80, if 500 to 250.01 0.70, or 0.50
     # Set the variable inside of scope.
-    # Added format for currency.
+    # Added format for currency and price variable.
     price = 0.00
     totalCost = '${:2,.2F}'.format(calculate_total_cost(cableInFeet, price))
 
