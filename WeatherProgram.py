@@ -15,7 +15,9 @@ import time
 # Start the main program here.
 def main():
 
-
+    # Create the array variables.
+    weatherDataArray = []
+    
     # Welcome the user.
     print("Welcome to the weather application!")
     print("Please enter the zip code you would like your data for: ")
@@ -29,14 +31,29 @@ def main():
     # Get the response in json format to then get the specific fields.
     jsonResponse = response.json() 
 
+    # Get the count of days
+    totalDays = jsonResponse['cnt']
+
+    # Use a for loop to access each element.
+    for i in range(totalDays):
+
+        # Set and get the date to display to the user.
+        UnixEpochtimeStamp = jsonResponse['list'][i]['dt']
+        convertedDate = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime(UnixEpochtimeStamp))
+
+        # Get the weather description for each day.
+        weatherDescription = jsonResponse['list'][i]['weather'][0]['description']
+
+        # Get the temperature from the data
+        weatherTemperature = jsonResponse['list'][i]['main']['temp']
+
+        print(convertedDate)
+        print(weatherDescription)
+        print(weatherTemperature)
+
+        weatherDataArray.append([convertedDate, weatherDescription, weatherTemperature])
+
     
-    UnixEpochtimeStamp = jsonResponse['list'][0]['dt']
-    convertedDate = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime(UnixEpochtimeStamp))
-
-    weatherDescription = jsonResponse['list'][0]['weather'][0]['description']
-
-    print(weatherDescription)
-    print(convertedDate)
 
 
 
