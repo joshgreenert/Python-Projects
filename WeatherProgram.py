@@ -17,11 +17,10 @@ def main():
 
     # Create the array variables.
     weatherDataArray = []
-    
+
     # Welcome the user.
     print("Welcome to the weather application!")
-    print("Please enter the zip code you would like your data for: ")
-    zipCode = input()
+    zipCode = input("Please enter the zip code you would like:")
 
     # Get the user's waather data using the endpoint + appid + their zip code.
     appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
@@ -59,3 +58,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+ 
