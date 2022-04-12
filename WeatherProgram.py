@@ -12,6 +12,34 @@
 import requests
 import time
 
+# Define the print function for the multi-dimensional array.
+def print_weather_data(weatherDataArray):
+    for i in weatherDataArray:
+        date = ''
+        description = ''
+        temperature = 0
+
+        count = 0
+
+        # Get the variables set to print collectively.
+        for j in i:
+            if(count == 0):
+                date = j
+                count += 1
+            elif(count == 1):
+                description = j
+                count += 1
+            elif(count == 2):
+                temperature = j
+    
+        print("The forcast for", date)
+        print(description, temperature)
+
+# Convert the temperature to fahrenheit
+# F = 9/5(K - 273) + 32
+def convert_to_fahrenheit(temp):
+    return '{:2,.2F}'.format(9.0 / 5.0 * (temp - 273.0) + 32.0)
+
 # Start the main program here.
 def main():
 
@@ -46,11 +74,13 @@ def main():
         # Get the temperature from the data
         weatherTemperature = jsonResponse['list'][i]['main']['temp']
 
-        print(convertedDate)
-        print(weatherDescription)
-        print(weatherTemperature)
+        # Convert the temperature to farenheit
+        weatherTemperature = convert_to_fahrenheit(weatherTemperature)
 
+        # Set the items to an array
         weatherDataArray.append([convertedDate, weatherDescription, weatherTemperature])
+
+    print_weather_data(weatherDataArray)
 
     
 
