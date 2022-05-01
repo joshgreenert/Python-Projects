@@ -14,26 +14,11 @@ import time
 
 # Define the print function for the multi-dimensional array.
 def print_weather_data(weatherDataArray):
-    for i in weatherDataArray:
-        date = ''
-        description = ''
-        temperature = 0
-
-        count = 0
-
-        # Get the variables set to print collectively.
-        for j in i:
-            if(count == 0):
-                date = j
-                count += 1
-            elif(count == 1):
-                description = j
-                count += 1
-            elif(count == 2):
-                temperature = j
-    
-        print("The forcast for", date)
-        print(description, temperature)
+    print(f"The forcast for {weatherDataArray[0][1]} on {weatherDataArray[0][0]} is {weatherDataArray[0][2]}")
+    print(f"There will be a high of {weatherDataArray[0][3]} and a low of {weatherDataArray[0][4]}.")
+    print(f"Pressure: {weatherDataArray[0][5]}")
+    print(f"Humidity: {weatherDataArray[0][6]}")
+    print(f"Cloud Cover: {weatherDataArray[0][7]}")
 
 # Define the zip code call to the API.
 def get_zipCode_json():
@@ -57,14 +42,28 @@ def get_zipCode_json():
     else:
         tempUnit = "standard"
 
-    # Get the user's waather data using the endpoint + appid + their zip code.
+    # Get the user's geocode json array.
     appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
-    endPoint = "http://api.openweathermap.org/data/2.5/forecast?appid=" + appId + "&zip=" + zipCode + "&units=" + tempUnit
-    response = requests.get(endPoint)
 
-    # Get the response in json format to then get the specific fields.
-    jsonResponse = response.json() 
-    return jsonResponse
+    geoEndPoint = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zipCode + "&appid=" + appId
+    response = requests.get(geoEndPoint)
+
+    # Get the response from the geocode request.
+    geoJsonResponse = response.json() 
+
+    # Get lat and lon from the json response.
+    lon = geoJsonResponse['lon']
+    lat = geoJsonResponse['lat']
+
+    currentWeatherEndPoint = "https://api.openweathermap.org/data/2.5/weather?appid=" + str(appId) + "&units=" + str(tempUnit) + "&lat=" + str(lat) + "&lon=" + str(lon)
+
+    # Get the response from the geocode request.
+    response = requests.get(currentWeatherEndPoint) 
+
+    # Get the response from the geocode request.
+    currentWeatherJsonResponse = response.json()
+
+    return currentWeatherJsonResponse
 
 # Define the city call to the API.
 def get_city_json():
@@ -85,39 +84,49 @@ def get_city_json():
     else:
         tempUnit = "standard"
     
-    # Get the user's waather data using the endpoint + appid + their zip code.
+    # Get the user's waather geocode json array.
     appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
-    endPoint = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + stateName + "&appid=" + appId + "&units=" + tempUnit
-    response = requests.get(endPoint)
 
-    # Get the response in json format to then get the specific fields.
-    jsonResponse = response.json() 
-    return jsonResponse
+    geoEndPoint = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "," + stateName + "&appid=" + appId
+    response = requests.get(geoEndPoint)
+
+    # Get the response from the geocode request.
+    geoJsonResponse = response.json() 
+
+    # Get lat and lon from the json response.
+    lon = geoJsonResponse[0]['lon']
+    lat = geoJsonResponse[0]['lat']
+
+    currentWeatherEndPoint = "https://api.openweathermap.org/data/2.5/weather?appid=" + str(appId) + "&units=" + str(tempUnit) + "&lat=" + str(lat) + "&lon=" + str(lon)
+
+    # Get the response from the geocode request.
+    response = requests.get(currentWeatherEndPoint) 
+
+    # Get the response from the geocode request.
+    currentWeatherJsonResponse = response.json()
+
+    return currentWeatherJsonResponse
 
 # Define the method that returns a zip code API object array.
-def get_weather_data_zip(jsonResponse):
+def get_weather_data(jsonResponse):
     # Get the count of days
     weatherDataArray = []
-    totalDays = jsonResponse['cnt']
 
-    # Use a for loop to access each element.
-    for i in range(totalDays):
+    # Get the date and convert it for the user.
+    UnixEpochtimeStamp = jsonResponse['dt']
+    convertedDate = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime(UnixEpochtimeStamp))
 
-        # Set and get the date to display to the user.
-        UnixEpochtimeStamp = jsonResponse['list'][i]['dt']
-        convertedDate = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime(UnixEpochtimeStamp))
+    # Get the other variables set to pass in the array object.
+    cityName = jsonResponse['name']
+    currentTemp = jsonResponse['main']['temp']
+    highTemp = jsonResponse['main']['temp_max']
+    lowTemp = jsonResponse['main']['temp_min']
+    pressure = jsonResponse['main']['pressure']
+    humidity = jsonResponse['main']['humidity']
+    cloudCover = jsonResponse['weather'][0]['description']
 
-        # Get the weather description for each day.
-        weatherDescription = jsonResponse['list'][i]['weather'][0]['description']
-
-        # Get the temperature from the data
-        weatherTemperature = jsonResponse['list'][i]['main']['temp']
-
-        # Convert the temperature to farenheit
-        weatherTemperature = weatherTemperature
-
-        # Set the items to an array
-        weatherDataArray.append([convertedDate, weatherDescription, weatherTemperature])
+    # Add the items to the weather data array.
+    weatherDataArray.append([convertedDate, cityName, currentTemp, highTemp, lowTemp, pressure, humidity, cloudCover])
 
     return weatherDataArray
 
@@ -148,7 +157,7 @@ def main():
     jsonResponse = get_city_json() if zipOrCityPrompt == "1" else get_zipCode_json()
 
     # Get the weather data from the json into an array.
-    weatherDataArray = get_weather_data_zip(jsonResponse) if zipOrCityPrompt == "1" else get_weather_data_city(jsonResponse)
+    weatherDataArray = get_weather_data(jsonResponse)
 
     print_weather_data(weatherDataArray)
 
