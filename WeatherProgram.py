@@ -40,23 +40,68 @@ def print_weather_data(weatherDataArray):
 def convert_to_fahrenheit(temp):
     return '{:2,.2F}'.format(9.0 / 5.0 * (temp - 273.0) + 32.0)
 
+# Define the zip code call to the API.
+def get_zipCode_json():
+    zipCode = input("Please enter the zip code you would like:")
+
+    while (zipCode.isnumeric() != True or len(zipCode) != 5):
+        print("Error: Invalid selection")
+        zipCode = input("Please enter the zip code you would like:")
+
+    tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
+
+    while (tempUnit.lower != "f" or tempUnit.lower != "c" or tempUnit.lower != "k" ):
+        print("Error: Invalid selection")
+        tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
+
+    # Get the user's waather data using the endpoint + appid + their zip code.
+    appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
+    endPoint = "http://api.openweathermap.org/data/2.5/forecast?appid=" + appId + "&zip=" + zipCode + "&units=" + tempUnit
+    response = requests.get(endPoint)
+
+    # Get the response in json format to then get the specific fields.
+    jsonResponse = response.json() 
+    return jsonResponse
+
+# Define the city call to the API.
+def get_city_json():
+    cityName = input("Please enter the city name:")
+    stateName = input("Please enter the state abbreviation:")
+
+    tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
+
+    while (tempUnit.lower != "f" or tempUnit.lower != "c" or tempUnit.lower != "k" ):
+        print("Error: Invalid selection")
+        tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
+    
+    # Get the user's waather data using the endpoint + appid + their zip code.
+    appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
+    endPoint = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "," + stateName + "&appid=" + appId + "&units=" + tempUnit
+    response = requests.get(endPoint)
+
+    # Get the response in json format to then get the specific fields.
+    jsonResponse = response.json() 
+    return jsonResponse
+
 # Start the main program here.
 def main():
 
     # Create the array variables.
     weatherDataArray = []
 
-    # Welcome the user.
+    # Welcome the user and get the user's weather lookup request.
+    print("###################################")
     print("Welcome to the weather application!")
-    zipCode = input("Please enter the zip code you would like:")
+    print("###################################")
 
-    # Get the user's waather data using the endpoint + appid + their zip code.
-    appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
-    endPoint = "http://api.openweathermap.org/data/2.5/forecast?appid=" + appId + "&zip=" + zipCode
-    response = requests.get(endPoint)
+    zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
 
-    # Get the response in json format to then get the specific fields.
-    jsonResponse = response.json() 
+    while zipOrCityPrompt != "1" or zipOrCityPrompt != "2":
+        print("Error: Invalid selection")
+        zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
+
+    # Get the json response from the request.
+    jsonResponse = get_zipCode_json()
 
     # Get the count of days
     totalDays = jsonResponse['cnt']
