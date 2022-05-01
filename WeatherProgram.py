@@ -8,7 +8,6 @@
 # prompted for their city or zip code? and request weather forcast data from OpenWeatherMap to provide the
 # user with legible data.
 #
-# Endpoint for API call http://api.openweathermap.org/data/2.5/weather?
 import requests
 import time
 
