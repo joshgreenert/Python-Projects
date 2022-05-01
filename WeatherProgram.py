@@ -39,15 +39,23 @@ def print_weather_data(weatherDataArray):
 def get_zipCode_json():
     zipCode = input("Please enter the zip code you would like:")
 
-    while (zipCode.isnumeric() != True or len(zipCode) != 5):
+    while (zipCode.isnumeric() != True and len(zipCode) != 5):
         print("Error: Invalid selection")
         zipCode = input("Please enter the zip code you would like:")
 
     tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
 
-    while (tempUnit.lower != "f" or tempUnit.lower != "c" or tempUnit.lower != "k" ):
+    while (tempUnit.lower() != "f" and tempUnit.lower() != "c" and tempUnit.lower() != "k" ):
         print("Error: Invalid selection")
         tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
+
+    # Determine the type of units to use and set that to the tempUnit variable.
+    if(tempUnit == "f"):
+        tempUnit = "imperial"
+    elif(tempUnit == "c"):
+        tempUnit = "metric"
+    else:
+        tempUnit = "standard"
 
     # Get the user's waather data using the endpoint + appid + their zip code.
     appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
@@ -65,9 +73,17 @@ def get_city_json():
 
     tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
 
-    while (tempUnit.lower != "f" or tempUnit.lower != "c" or tempUnit.lower != "k" ):
+    while (tempUnit.lower() != "f" and tempUnit.lower() != "c" and tempUnit.lower() != "k" ):
         print("Error: Invalid selection")
         tempUnit = input("Would you like to view temperatures in Fahrenheit, Celsius, or Kelvin.\nEnter 'F' for Fahrenheit, 'C' for Celsius, 'K' for Kelvin:")
+
+    # Determine the type of units to use and set that to the tempUnit variable.
+    if(tempUnit == "f"):
+        tempUnit = "imperial"
+    elif(tempUnit == "c"):
+        tempUnit = "metric"
+    else:
+        tempUnit = "standard"
     
     # Get the user's waather data using the endpoint + appid + their zip code.
     appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
@@ -78,31 +94,10 @@ def get_city_json():
     jsonResponse = response.json() 
     return jsonResponse
 
-# Start the main program here.
-def main():
-
-    # Create the static variables.
-    weatherDataArray = []
-    jsonResponse = ""
-
-    # Welcome the user and get the user's weather lookup request.
-    print("###################################")
-    print("Welcome to the weather application!")
-    print("###################################")
-
-    zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
-
-    while zipOrCityPrompt != "1" or zipOrCityPrompt != "2":
-        print("Error: Invalid selection")
-        zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
-
-    # Get the json response from the request.
-    if(zipOrCityPrompt == 1):
-        jsonResponse = get_city_json()
-    else:
-        jsonResponse = get_zipCode_json()
-
+# Define the method that returns a zip code API object array.
+def get_weather_data_zip(jsonResponse):
     # Get the count of days
+    weatherDataArray = []
     totalDays = jsonResponse['cnt']
 
     # Use a for loop to access each element.
@@ -124,9 +119,38 @@ def main():
         # Set the items to an array
         weatherDataArray.append([convertedDate, weatherDescription, weatherTemperature])
 
-    print_weather_data(weatherDataArray)
+    return weatherDataArray
 
-    
+# Define the method that returns a city API object array.
+def get_weather_data_city(jsonResponse):
+    # Get the count of days
+    weatherDataArray = []
+
+# Start the main program here.
+def main():
+
+    # Create the static variables.
+    weatherDataArray = []
+    jsonResponse = ""
+
+    # Welcome the user and get the user's weather lookup request.
+    print("###################################")
+    print("Welcome to the weather application!")
+    print("###################################")
+
+    zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
+
+    while zipOrCityPrompt != "1" and zipOrCityPrompt != "2":
+        print("Error: Invalid selection")
+        zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
+
+    # Get the json response from the request.
+    jsonResponse = get_city_json() if zipOrCityPrompt == "1" else get_zipCode_json()
+
+    # Get the weather data from the json into an array.
+    weatherDataArray = get_weather_data_zip(jsonResponse) if zipOrCityPrompt == "1" else get_weather_data_city(jsonResponse)
+
+    print_weather_data(weatherDataArray)
 
 
 
