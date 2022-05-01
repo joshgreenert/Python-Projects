@@ -35,11 +35,6 @@ def print_weather_data(weatherDataArray):
         print("The forcast for", date)
         print(description, temperature)
 
-# Convert the temperature to fahrenheit
-# F = 9/5(K - 273) + 32
-def convert_to_fahrenheit(temp):
-    return '{:2,.2F}'.format(9.0 / 5.0 * (temp - 273.0) + 32.0)
-
 # Define the zip code call to the API.
 def get_zipCode_json():
     zipCode = input("Please enter the zip code you would like:")
@@ -86,8 +81,9 @@ def get_city_json():
 # Start the main program here.
 def main():
 
-    # Create the array variables.
+    # Create the static variables.
     weatherDataArray = []
+    jsonResponse = ""
 
     # Welcome the user and get the user's weather lookup request.
     print("###################################")
@@ -101,7 +97,10 @@ def main():
         zipOrCityPrompt = input("Would you like to lookup weather data by US City or zip code?\nEnter 1 for US City 2 for zip:")
 
     # Get the json response from the request.
-    jsonResponse = get_zipCode_json()
+    if(zipOrCityPrompt == 1):
+        jsonResponse = get_city_json()
+    else:
+        jsonResponse = get_zipCode_json()
 
     # Get the count of days
     totalDays = jsonResponse['cnt']
@@ -120,7 +119,7 @@ def main():
         weatherTemperature = jsonResponse['list'][i]['main']['temp']
 
         # Convert the temperature to farenheit
-        weatherTemperature = convert_to_fahrenheit(weatherTemperature)
+        weatherTemperature = weatherTemperature
 
         # Set the items to an array
         weatherDataArray.append([convertedDate, weatherDescription, weatherTemperature])
