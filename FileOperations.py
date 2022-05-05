@@ -9,6 +9,7 @@
 # adding each word to a dictionary.  The dictionary should contain the word and the count of how
 # often the word occurs.  At the end of the program, the dictionary should be printed to the 
 # screen in a legible format for the user.
+import re
 
 # Define the add word function so that each word that is added is counted appropriately.
 def add_word(word, dictionary):
@@ -23,7 +24,8 @@ def process_line(line, dictionary):
 
     # Use regex to strip word.
     for word in words:
-        strippedWord = "".join(char for char in word if char.isalpha())
+        strippedWord = re.sub(r"[^a-zA-Z]+", '', word)
+        strippedWord = strippedWord.lower()
         
         if(strippedWord != '' ):
             add_word(strippedWord, dictionary)
@@ -58,7 +60,7 @@ def main():
     # Open the file and catch the exception should it occur.
     try:
         fileHolder = open(filename, 'r')
-    except OSError:
+    except IOError:
         print("Error: File not found!") 
 
     # Create a new object to hold the lines, then for loop them.
