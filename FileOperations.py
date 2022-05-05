@@ -24,7 +24,7 @@ def process_line(line, dictionary):
 
     # Use regex to strip word.
     for word in words:
-        strippedWord = re.sub(r"[^a-zA-Z]+", '', word)
+        strippedWord = re.sub(r"[^a-zA-Z0-9]+", '', word)
         strippedWord = strippedWord.lower()
         
         if(strippedWord != '' ):
