@@ -5,18 +5,106 @@
 # Author: Joshua Greenert
 # Date: 5/10/2022
 #
-# For this week we will modify our Gettysburg processing program from week 8 in order to generate a 
-# text file from the output rather than printing to the screen. Your program should have a new function 
-# called process_file which prints to the file (this method should almost be the same as the pretty_print 
-# function from last week. Keep in mind that we have print statements in main as well. Your program must 
-# modify the print statements from main as well.
 
-
-# Your program must have a header. 
-# Your program should adhere to PEP8 guidelines especially as it pertains to variable names.
-# Create a new function called process_fie. This function will perform the same operations as pretty_print from week 8 however it will print to a file instead of to the screen.
-# Modify your main method to print the length of the dictionary to the file as opposed to the screen.
 # This will require that you open the file twice. Once in main and once in process_file.
 # Prompt the user for the filename they wish to use to generate the report.
 # Use the filename specified by the user to write the file.
 # This will require you to pass the file as an additional parameter to your new process_file function.
+
+
+# DSC 510
+# Week 8
+#
+# Programming Assignment Week 8
+# Author: Joshua Greenert
+# Date: 5/3/2022
+#
+# This program will open a file and read the text line by line to remove special characters while
+# adding each word to a dictionary.  The dictionary should contain the word and the count of how
+# often the word occurs.  At the end of the program, the dictionary should be printed to the 
+# screen in a legible format for the user.
+import re
+
+# Define the add word function so that each word that is added is counted appropriately.
+def add_word(word, dictionary):
+    if word in dictionary:
+        dictionary[word] += 1
+    else:
+        dictionary[word] = 1
+
+# Process the line to split the words and remove the special characters.
+def process_line(line, dictionary):
+    words = line.split()
+
+    # Use regex to strip word.
+    for word in words:
+        strippedWord = re.sub(r"[^a-zA-Z0-9]+", '', word)
+        strippedWord = strippedWord.lower()
+        
+        if(strippedWord != '' ):
+            add_word(strippedWord, dictionary)
+    
+
+# Define the pretty print function so that the dictionary is printed in a legible format.
+def process_file(dictionary, userFilename):
+    
+    # Ask the user for their filename.
+    try:
+        userFileHolder = open(userFilename, 'a')
+    except IOError:
+        print("Something happened.")
+
+    length = len(dictionary)
+
+    # Sort the dictionary by value instead of key.
+    sortedDictionary = sorted(dictionary.items(), key = lambda kv: kv[1], reverse = True)
+
+    # Print the length and the words in order from largest to smallest.
+    userFileHolder.write(f"Length of the dictionary: {length}\n")
+    userFileHolder.write("Word             Count\n")
+    userFileHolder.write("----------------------\n")
+
+    # Use a for loop to print the data.
+    for i in sortedDictionary:
+        userFileHolder.write("{0:12}{1:8d}\n".format(i[0], i[1]))
+    
+
+def main():
+
+    # Open the file for the future operations.
+    filename = "gettysburg.txt"
+
+    # Create variables for later execution.
+    fileHolder = {}
+    dictionary = {}
+    userFilename = ''
+
+    # Ask the user for their filename.
+    try:
+        userFilename = input('Please enter the name of your file you would like to generate:') + ".txt"
+        userFileHolder = open(userFilename, 'w')
+    except IOError:
+        print("Something happened.")
+
+    # Open the file and catch the exception should it occur.
+    try:
+        fileHolder = open(filename, 'r')
+    except IOError:
+        print("Error: File not found!") 
+
+    # Create a new object to hold the lines, then for loop them.
+    lines = fileHolder.readlines()
+    
+    for line in lines:
+        process_line(line, dictionary)
+    
+    # Print the data collected for the user.
+    process_file(dictionary, userFilename)
+
+    # Close the file.
+    userFileHolder.close()
+    fileHolder.close()
+
+# Use an if function to call to the main function.
+if __name__ == "__main__":
+    main()

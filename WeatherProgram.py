@@ -86,7 +86,7 @@ def get_city_json():
     # Get the user's waather geocode json array.
     appId = "73545cb70bb2e48c60e5a4d09cf7fd5a"
 
-    geoEndPoint = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "," + stateName + "&appid=" + appId
+    geoEndPoint = "http://api.openweathermap.org/geo/1.0/direct?q={" + cityName + "," + stateName + "}&appid=" + appId
     response = requests.get(geoEndPoint)
 
     # Get the response from the geocode request.
