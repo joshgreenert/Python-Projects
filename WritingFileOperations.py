@@ -1,16 +1,3 @@
-# DSC 510
-# Week 9
-#
-# Programming Assignment Week 9
-# Author: Joshua Greenert
-# Date: 5/10/2022
-#
-
-# This will require that you open the file twice. Once in main and once in process_file.
-# Prompt the user for the filename they wish to use to generate the report.
-# Use the filename specified by the user to write the file.
-# This will require you to pass the file as an additional parameter to your new process_file function.
-
 
 # DSC 510
 # Week 8
