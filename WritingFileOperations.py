@@ -1,15 +1,22 @@
 
 # DSC 510
-# Week 8
+# Week 9
 #
-# Programming Assignment Week 8
+# Programming Assignment Week 9
 # Author: Joshua Greenert
-# Date: 5/3/2022
+# Date: 5/11/2022
+#
+# Change #1
+# Change(s) Made: Modified program to print output to user-entered filename
+# Date of Change: 5/11/2022
+# Author: Joshua Greenert
+# Change Approved by: Catie Williams
+# Date Moved to Production: 5/10/2022
 #
 # This program will open a file and read the text line by line to remove special characters while
 # adding each word to a dictionary.  The dictionary should contain the word and the count of how
-# often the word occurs.  At the end of the program, the dictionary should be printed to the 
-# screen in a legible format for the user.
+# often the word occurs.  The user will be asked to provide a filename that, if not found, will
+# be created where the data will be printed to.
 import re
 
 # Define the add word function so that each word that is added is counted appropriately.
@@ -32,14 +39,15 @@ def process_line(line, dictionary):
             add_word(strippedWord, dictionary)
     
 
-# Define the pretty print function so that the dictionary is printed in a legible format.
+# Define the process file function so that the dictionary is printed in a legible format.
+# Pass in the user's filename and append it to add the dictionary into it.
 def process_file(dictionary, userFilename):
     
     # Ask the user for their filename.
     try:
         userFileHolder = open(userFilename, 'a')
     except IOError:
-        print("Something happened.")
+        print(f"Error: The filename \"{userFilename}\" was unable to be opened.")
 
     length = len(dictionary)
 
@@ -71,7 +79,7 @@ def main():
         userFilename = input('Please enter the name of your file you would like to generate:') + ".txt"
         userFileHolder = open(userFilename, 'w')
     except IOError:
-        print("Something happened.")
+        print(f"Error: The filename \"{userFilename}\" was unable to be opened.")
 
     # Open the file and catch the exception should it occur.
     try:
