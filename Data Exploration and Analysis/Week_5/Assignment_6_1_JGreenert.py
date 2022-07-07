@@ -34,7 +34,7 @@ def InterpolateSample(df, log_upper=6.0):
     # each range
     arrays = []
     for _, row in df.iterrows():
-        vals = np.linspace(int(row.log_lower), int(row.log_upper), int(row.freq)) # Had to add int coercion
+        vals = np.linspace(row.log_lower, row.log_upper, int(row.freq)) # Had to add int coercion
         arrays.append(vals)
 
     # collect the arrays into a single sample
