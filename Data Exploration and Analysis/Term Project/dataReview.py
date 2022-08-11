@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 import thinkstats2
 import thinkplot
+import statsmodels.formula.api as smf
 
 '''
 ADDITIONAL FUNCTIONS NEEDED
@@ -188,16 +189,16 @@ for y in femaleParentLOE:
         femalePLOENumbers.append(5)
 
 # Find the covariance.
-print(Cov(malePLOENumbers, maleMathScores))
-print(Cov(femalePLOENumbers, femaleMathScores))
+print("Male Covariance: ", Cov(malePLOENumbers, maleMathScores))
+print("Female Covariance: ", Cov(femalePLOENumbers, femaleMathScores))
 '''
 male = 2.9188848332501163
 female = 4.407611693325978
 '''
 
 # Find the correlation.
-print(Corr(malePLOENumbers, maleMathScores))
-print(Corr(femalePLOENumbers, femaleMathScores))
+print("Male Correlation: ", Corr(malePLOENumbers, maleMathScores))
+print("Female Correlation: ", Corr(femalePLOENumbers, femaleMathScores))
 '''
 male = 0.14223727237303505
 female = 0.19202249203600952
@@ -215,14 +216,20 @@ malePValue = maleHT.PValue()
 femalePValue = femaleHT.PValue()
 
 # Print the results.
-print(malePValue)
-print(femalePValue)
+print("Male p-value: ", malePValue)
+print("Female p-value: ", femalePValue)
 '''
 male p-value = 0.0
 female p-value = 0.0
 '''
 
 # Conduct a regression analysis on a dependent or explanatory variable.
+# Running multiple regression analysis.
+formula = 'Q("reading score") ~ Q("math score") + Q("writing score")'
 
+model = smf.ols(formula, data=df)
+results = model.fit()
+results.summary()
+print(results.summary())
 
 
