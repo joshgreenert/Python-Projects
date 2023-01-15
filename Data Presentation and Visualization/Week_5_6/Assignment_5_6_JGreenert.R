@@ -13,10 +13,10 @@ df_unemployment <- read.csv("unemployement-rate-1948-2010.csv")
 treemap(df_expenditures, index="category", vSize="expenditure", type="index", title="R Tree Map")
 
 # Set up an area chart
-ggplot(df_unemployment, aes(x="Year", y="Value")) +
-  geom_area( fill="#69b3a2", alpha=0.4) +
+ggplot(df_unemployment, aes(x=Year, y=Value)) +
+  geom_area( fill="#69b3a2", alpha=2) +
   geom_line(color="#69b3a2", size=2) +
-  geom_point(size=3, color="#69b3a2") +
+  geom_point(size=2, color="#69b3a2") +
   theme_ipsum() +
   ggtitle("R Area Chart")
 
