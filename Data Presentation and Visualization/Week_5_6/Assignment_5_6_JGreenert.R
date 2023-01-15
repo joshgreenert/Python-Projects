@@ -57,7 +57,6 @@ ggplot(new_df_unemployment, aes(x=yearly_averages, y=Year)) +
   ggtitle("R Area Chart")
 
 # Set up a Stacked area chart
-
-
-
+ggplot(df_expenditures, aes(x=year, y=expenditure, fill=category)) + 
+  geom_area() + ggtitle("R Stacked Area Chart")
 
