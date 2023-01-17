@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Predictive Analytics/Term_Project/steam_reviews.csv
+Predictive Analytics/Term_Project/Prepped_test_out.csv
