@@ -1,4 +1,5 @@
 library(ggplot2)
+library(mapview)
 
 ## Set the working directory to the root of your DSC 520 directory
 setwd("C:/Users/Josh/Documents/GitHub/Python-Projects/Data Presentation and Visualization/Week_9_10/")
@@ -16,11 +17,7 @@ data <- as.matrix(df_ppg)
 heatmap(data, scale="column", main="R Heat Map")
 
 # Create a spatial chart
-df_costcos
-
-ggplot(df_costcos, aes(Longitude, Latitude, group = State)) + 
-  geom_polygon(fill = "white", colour = "grey50") + 
-  coord_quickmap() + ggtitle('R Spatial Chart')
+mapview(df_costcos, xcol = "Longitude", ycol = "Latitude",cex = 3,crs = 4269, grid = FALSE)
 
 # Create a contour Chart
 ggplot(df_costcos, aes(x = Longitude, y = Latitude, fill = ..level..)) +
